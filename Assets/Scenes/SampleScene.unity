@@ -51199,8 +51199,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 7072444063363254193}
   m_AABB:
-    m_Center: {x: -34.27955, y: -49.079704, z: 120.48372}
-    m_Extent: {x: 95.48148, y: 94.6697, z: 10.629513}
+    m_Center: {x: -34.27955, y: -49.079704, z: 0}
+    m_Extent: {x: 96.4, y: 30, z: 17.9}
   m_DirtyAABB: 0
 --- !u!137 &7072444063357687479
 SkinnedMeshRenderer:
@@ -53242,7 +53242,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7072444063362964469}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.84, y: 0.5, z: -9.93}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -53256,7 +53256,7 @@ Transform:
   - {fileID: 7072444063363254179}
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7072444063363254230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53269,6 +53269,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b621f80a11fddca4e96881290761f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  mouseSensitivity: 0
+  cameraMinVerticalAngle: 0
+  cameraMaxVerticalAngle: 0
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0
