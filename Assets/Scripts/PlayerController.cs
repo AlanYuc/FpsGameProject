@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public float cameraMaxVerticalAngle;//最大角度
     private float xRotation; // 存储垂直旋转角度（X轴）
     private float yRotation; // 存储水平旋转角度（Y轴）
+    public Animator animator;
 
     void Start()
     {
@@ -26,8 +27,8 @@ public class PlayerController : MonoBehaviour
         xRotation = 0f;
         yRotation = 0f;
 
-        //Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
-        //Cursor.visible = false; // 隐藏鼠标
+        Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
+        Cursor.visible = false; // 隐藏鼠标
     }
 
     // Update is called once per frame
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMove();
         PlayerView();
+        Attack();
     }
 
     /// <summary>
@@ -81,5 +83,13 @@ public class PlayerController : MonoBehaviour
 
         //应用旋转(先水平后垂直，避免万向节死锁)
         transform.rotation = horizontalRotation * verticalRotation;
+    }
+
+    private void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            animator.SetTrigger("Attack");
+        }
     }
 }
