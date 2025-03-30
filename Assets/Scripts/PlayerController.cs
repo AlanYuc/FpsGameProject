@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private float xRotation; // ´æ´¢´¹Ö±Ðý×ª½Ç¶È£¨XÖá£©
     private float yRotation; // ´æ´¢Ë®Æ½Ðý×ª½Ç¶È£¨YÖá£©
     public Animator animator;
+    public Rigidbody playerRigidbody;
+    private float jumpforce;
 
     void Start()
     {
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
         cameraMaxVerticalAngle = 60f;
         xRotation = 0f;
         yRotation = 0f;
+        jumpforce = 300;
 
         Cursor.lockState = CursorLockMode.Locked; // Ëø¶¨Êó±ê
         Cursor.visible = false; // Òþ²ØÊó±ê
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         PlayerView();
         Attack();
+        Jump();
     }
 
     /// <summary>
@@ -85,11 +89,22 @@ public class PlayerController : MonoBehaviour
         transform.rotation = horizontalRotation * verticalRotation;
     }
 
+    /// <summary>
+    /// ¹¥»÷
+    /// </summary>
     private void Attack()
     {
         if (Input.GetMouseButtonDown(0))
         {
             animator.SetTrigger("Attack");
+        }
+    }
+
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerRigidbody.AddForce(jumpforce * Vector3.up);
         }
     }
 }
