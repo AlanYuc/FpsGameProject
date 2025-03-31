@@ -14798,6 +14798,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wraith
       objectReference: {fileID: 0}
+    - target: {fileID: 2499452444250165043, guid: 9257ae217dd1b404c845ae1f178cbfd8, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3018544719663928713, guid: 9257ae217dd1b404c845ae1f178cbfd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.9664974
@@ -53370,6 +53374,7 @@ MonoBehaviour:
   cameraMaxVerticalAngle: 0
   animator: {fileID: 7072444063353448567}
   playerRigidbody: {fileID: 7072444063363254232}
+  muzzleTransform: {fileID: 416150362}
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0

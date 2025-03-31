@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public Rigidbody playerRigidbody;
     private float jumpforce;
+    public Transform muzzleTransform;//Ç¹¿ÚÎ»ÖÃ
 
     void Start()
     {
@@ -97,6 +98,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             animator.SetTrigger("Attack");
+
+            RaycastHit hit;
+            if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
+            {
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    Debug.Log(hit.collider.name);
+                }
+            }
         }
     }
 
