@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public GameObject grassEffect;//击中草、叶子的特效
     public GameObject treeEffect;//击中树的特效
     public GameObject riverEffect;//击中水的特效
+    public float attackCD;//单点开枪的CD
+    public float attackTimer;//开枪的时间间隔计时器
 
     void Start()
     {
@@ -35,6 +37,8 @@ public class PlayerController : MonoBehaviour
         xRotation = 0f;
         yRotation = 0f;
         jumpforce = 300;
+        attackCD = 0.8f;
+        attackTimer = 0;
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
         Cursor.visible = false; // 隐藏鼠标
@@ -100,8 +104,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD) 
         {
+            attackTimer = Time.time;
             animator.SetTrigger("Attack");
 
             RaycastHit hit;
