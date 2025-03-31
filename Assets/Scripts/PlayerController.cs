@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public GameObject riverEffect;//击中水的特效
     public float attackCD;//单点开枪的CD
     public float attackTimer;//开枪的时间间隔计时器
+    public GameObject fireEffect;//开枪的焰火特效
 
     void Start()
     {
@@ -107,7 +108,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD) 
         {
             attackTimer = Time.time;
+
             animator.SetTrigger("Attack");
+
+            GameObject fire = Instantiate(fireEffect, muzzleTransform);
+            fire.transform.localPosition = Vector3.zero;
+            fire.transform.localEulerAngles = Vector3.zero;//注意都是local
 
             RaycastHit hit;
             if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))

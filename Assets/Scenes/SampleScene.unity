@@ -55848,6 +55848,9 @@ MonoBehaviour:
   grassEffect: {fileID: 4203570407296169084, guid: 877d7e921ccdb8649a60dbf52d55cc50, type: 3}
   treeEffect: {fileID: 4203570407296169084, guid: 19f6a46879384dd448f2e7f811e9e9ea, type: 3}
   riverEffect: {fileID: 4203570407296169084, guid: 08bbe49341a20a64099877e8e359e371, type: 3}
+  attackCD: 0
+  attackTimer: 0
+  fireEffect: {fileID: 100006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0
