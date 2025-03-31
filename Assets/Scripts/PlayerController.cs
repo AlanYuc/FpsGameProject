@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(-0.2f, transform.position.y, transform.position.z);
-        moveSpeed = 1.5f;
+        moveSpeed = 2.0f;
         mouseSensitivity = 800.0f;
         cameraMinVerticalAngle = -60f;
         cameraMaxVerticalAngle = 60f;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
                     case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
                     case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
                     case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
-                    case "River": Instantiate(riverEffect, hit.point, Quaternion.identity); break;
+                    case "River": Instantiate(riverEffect, hit.point + Vector3.up * 0.2f, Quaternion.identity); break;
                 }
             }
         }
