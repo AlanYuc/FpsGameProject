@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
     public Rigidbody playerRigidbody;
     private float jumpforce;
     public Transform muzzleTransform;//枪口位置
+    public GameObject bloodEffect;//血液特效
+    public GameObject wallEffect;//击中路、墙的特效
+    public GameObject grassEffect;//击中草、叶子的特效
+    public GameObject treeEffect;//击中树的特效
+    public GameObject riverEffect;//击中水的特效
 
     void Start()
     {
@@ -102,9 +107,19 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
             {
-                if (hit.collider.CompareTag("Enemy"))
+                //if (hit.collider.CompareTag("Enemy"))   
+                //{
+                //    Debug.Log(hit.collider.name);
+                //    Instantiate(bloodEffect,hit.point, Quaternion.identity);
+                //}
+
+                switch (hit.collider.tag)
                 {
-                    Debug.Log(hit.collider.name);
+                    case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity); break;
+                    case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
+                    case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
+                    case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
+                    case "River": Instantiate(riverEffect, hit.point, Quaternion.identity); break;
                 }
             }
         }
