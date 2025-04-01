@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GUNTYPE
+{
+        SINGLESHOTRIGLE,
+        AUTORIFLE,
+        SNIPERRIFLE
+}
+
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -27,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public float attackCD;//单点开枪的CD
     public float attackTimer;//开枪的时间间隔计时器
     public GameObject fireEffect;//开枪的焰火特效
+    public GUNTYPE gunType;
 
     void Start()
     {
@@ -40,6 +48,7 @@ public class PlayerController : MonoBehaviour
         jumpforce = 300;
         attackCD = 0.8f;
         attackTimer = 0;
+        gunType = GUNTYPE.SINGLESHOTRIGLE;
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
         Cursor.visible = false; // 隐藏鼠标
@@ -52,6 +61,7 @@ public class PlayerController : MonoBehaviour
         PlayerView();
         Attack();
         Jump();
+        ChangeGunType();
     }
 
     /// <summary>
@@ -105,34 +115,18 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD) 
+        switch (gunType)
         {
-            attackTimer = Time.time;
-
-            animator.SetTrigger("Attack");
-
-            GameObject fire = Instantiate(fireEffect, muzzleTransform);
-            fire.transform.localPosition = Vector3.zero;
-            fire.transform.localEulerAngles = Vector3.zero;//注意都是local
-
-            RaycastHit hit;
-            if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
-            {
-                //if (hit.collider.CompareTag("Enemy"))   
-                //{
-                //    Debug.Log(hit.collider.name);
-                //    Instantiate(bloodEffect,hit.point, Quaternion.identity);
-                //}
-
-                switch (hit.collider.tag)
-                {
-                    case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity); break;
-                    case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
-                    case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
-                    case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
-                    case "River": Instantiate(riverEffect, hit.point + Vector3.up * 0.2f, Quaternion.identity); break;
-                }
-            }
+            case GUNTYPE.SINGLESHOTRIGLE:
+                SingleShotAttack();
+                break;
+            case GUNTYPE.AUTORIFLE:
+                AutoShotAttack();
+                break;
+            case GUNTYPE.SNIPERRIFLE:
+                break;
+            default:
+                break;
         }
     }
 
@@ -141,6 +135,77 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerRigidbody.AddForce(jumpforce * Vector3.up);
+        }
+    }
+
+    private void ChangeGunType()
+    {
+        //按键切换
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            gunType = GUNTYPE.SINGLESHOTRIGLE;
+            attackCD = 0.8f;
+            Debug.Log("切换为单点");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            gunType = GUNTYPE.AUTORIFLE;
+            attackCD = 0.1f;
+            Debug.Log("切换为自动");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            gunType = GUNTYPE.SNIPERRIFLE;
+            Debug.Log("切换为狙击");
+        }
+
+        //滚轮切换
+        //to do
+    }
+
+    private void SingleShotAttack()
+    {
+        if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
+        {
+            GunAttack();
+        }
+    }
+
+    private void AutoShotAttack()
+    {
+        if(Input.GetMouseButton(0) && Time.time - attackTimer >= attackCD)
+        {
+            GunAttack();
+        }
+    }
+
+    private void GunAttack()
+    {
+        attackTimer = Time.time;
+
+        animator.SetTrigger("Attack");
+
+        GameObject fire = Instantiate(fireEffect, muzzleTransform);
+        fire.transform.localPosition = Vector3.zero;
+        fire.transform.localEulerAngles = Vector3.zero;//注意都是local
+
+        RaycastHit hit;
+        if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
+        {
+            //if (hit.collider.CompareTag("Enemy"))   
+            //{
+            //    Debug.Log(hit.collider.name);
+            //    Instantiate(bloodEffect,hit.point, Quaternion.identity);
+            //}
+
+            switch (hit.collider.tag)
+            {
+                case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity); break;
+                case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
+                case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
+                case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
+                case "River": Instantiate(riverEffect, hit.point + Vector3.up * 0.2f, Quaternion.identity); break;
+            }
         }
     }
 }
