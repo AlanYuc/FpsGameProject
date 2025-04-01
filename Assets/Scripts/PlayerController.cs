@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public float attackCD;//单点开枪的CD
     public float attackTimer;//开枪的时间间隔计时器
     public GameObject fireEffect;//开枪的焰火特效
+    public GameObject fireEffect2;
     public GUNTYPE gunType;
 
     void Start()
@@ -167,6 +168,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
+            GameObject fire = Instantiate(fireEffect, muzzleTransform);
+            fire.transform.localPosition = Vector3.zero;
+            fire.transform.localEulerAngles = Vector3.zero;//注意都是local
+
             animator.SetTrigger("SingleAttack");
             Invoke("GunAttack", 0.2f);//动画总时长0.5秒，后坐力产生大概是0.2秒左右
         }
@@ -176,6 +181,10 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && Time.time - attackTimer >= attackCD)
         {
+            GameObject fire = Instantiate(fireEffect2, muzzleTransform);
+            fire.transform.localPosition = Vector3.zero;
+            fire.transform.localEulerAngles = Vector3.zero;//注意都是local
+
             animator.SetBool("AutoAttack", true);
             GunAttack();
         }
@@ -188,10 +197,6 @@ public class PlayerController : MonoBehaviour
     private void GunAttack()
     {
         attackTimer = Time.time;
-
-        GameObject fire = Instantiate(fireEffect, muzzleTransform);
-        fire.transform.localPosition = Vector3.zero;
-        fire.transform.localEulerAngles = Vector3.zero;//注意都是local
 
         RaycastHit hit;
         if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
