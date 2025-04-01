@@ -55851,6 +55851,7 @@ MonoBehaviour:
   attackCD: 0
   attackTimer: 0
   fireEffect: {fileID: 100006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
+  gunType: 0
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0

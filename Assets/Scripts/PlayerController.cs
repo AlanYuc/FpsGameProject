@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         xRotation = 0f;
         yRotation = 0f;
         jumpforce = 300;
-        attackCD = 0.8f;
+        attackCD = 0.5f;
         attackTimer = 0;
         gunType = GUNTYPE.SINGLESHOTRIGLE;
 
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             gunType = GUNTYPE.SINGLESHOTRIGLE;
-            attackCD = 0.8f;
+            attackCD = 0.5f;
             Debug.Log("切换为单点");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -167,7 +167,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
-            GunAttack();
+            animator.SetTrigger("SingleAttack");
+            Invoke("GunAttack", 0.2f);//动画总时长0.5秒，后坐力产生大概是0.2秒左右
         }
     }
 
@@ -175,15 +176,18 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && Time.time - attackTimer >= attackCD)
         {
+            animator.SetBool("AutoAttack", true);
             GunAttack();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            animator.SetBool("AutoAttack", false);
         }
     }
 
     private void GunAttack()
     {
         attackTimer = Time.time;
-
-        animator.SetTrigger("Attack");
 
         GameObject fire = Instantiate(fireEffect, muzzleTransform);
         fire.transform.localPosition = Vector3.zero;
