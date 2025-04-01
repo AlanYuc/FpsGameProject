@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public float attackTimer;//开枪的时间间隔计时器
     public GameObject fireEffect;//开枪的焰火特效
     public GameObject fireEffect2;
+    public GameObject fireEffect3;
     public GUNTYPE gunType;
 
     void Start()
@@ -125,6 +126,7 @@ public class PlayerController : MonoBehaviour
                 AutoShotAttack();
                 break;
             case GUNTYPE.SNIPERRIFLE:
+                SniperAttack();
                 break;
             default:
                 break;
@@ -157,6 +159,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             gunType = GUNTYPE.SNIPERRIFLE;
+            attackCD = 1f;
             Debug.Log("切换为狙击");
         }
 
@@ -192,6 +195,23 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("AutoAttack", false);
         }
+    }
+
+    private void SniperAttack()
+    {
+        //未开镜
+        if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
+        {
+            GameObject fire = Instantiate(fireEffect3, muzzleTransform);
+            fire.transform.localPosition = Vector3.zero;
+            fire.transform.localEulerAngles = Vector3.zero;//注意都是local
+
+            animator.SetTrigger("SniperAttack");
+            Invoke("GunAttack", 0.2f);//动画总时长0.5秒，后坐力产生大概是0.2秒左右
+        }
+
+        //开镜部分
+        //to do
     }
 
     private void GunAttack()
