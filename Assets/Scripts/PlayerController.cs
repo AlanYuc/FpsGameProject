@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public Dictionary<GUNTYPE, int> magazineSize;//弹匣容量
     public Dictionary<GUNTYPE, int> reserveAmmo;//备用子弹
     public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
+    public bool isReloading;//装填状态，装填中不能射击
 
     void Start()
     {
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
         attackCD = 0.5f;
         attackTimer = 0;
         gunType = GUNTYPE.SINGLESHOTRIGLE;
+        isReloading = false;
         InitAmmo();
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
@@ -66,6 +68,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         PlayerView();
         Attack();
+        Reload();
         Jump();
         ChangeGunType();
     }
@@ -143,20 +146,62 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        switch (gunType)
+        if (ammoInMag[gunType] > 0 && !isReloading)//弹匣内有子弹可以射击
         {
-            case GUNTYPE.SINGLESHOTRIGLE:
-                SingleShotAttack();
-                break;
-            case GUNTYPE.AUTORIFLE:
-                AutoShotAttack();
-                break;
-            case GUNTYPE.SNIPERRIFLE:
-                SniperAttack();
-                break;
-            default:
-                break;
+            switch (gunType)
+            {
+                case GUNTYPE.SINGLESHOTRIGLE:
+                    SingleShotAttack();
+                    break;
+                case GUNTYPE.AUTORIFLE:
+                    AutoShotAttack();
+                    break;
+                case GUNTYPE.SNIPERRIFLE:
+                    SniperAttack();
+                    break;
+                default:
+                    break;
+            }
         }
+        else//弹匣内没有子弹
+        {
+            //to do
+        }
+        
+    }
+
+    /// <summary>
+    /// 重新装填
+    /// </summary>
+    private void Reload()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            animator.SetTrigger("Reloading");
+            isReloading = true;
+            Invoke("RecoverAttackState", 2.8f);//2.8是装填动画的时长
+
+            if (reserveAmmo[gunType] == 0)
+            {
+                Debug.Log("备弹量为0，装填失败");
+            }
+            else if (reserveAmmo[gunType] + ammoInMag[gunType] <= magazineSize[gunType]) 
+            {
+                magazineSize[gunType] += reserveAmmo[gunType];
+                reserveAmmo[gunType] = 0;
+            }
+            else
+            {
+                int reloadAmmo = magazineSize[gunType] - ammoInMag[gunType];
+                ammoInMag[gunType] = magazineSize[gunType];
+                reserveAmmo[gunType] -= reloadAmmo;
+            }
+        }
+    }
+
+    private void RecoverAttackState()
+    {
+        isReloading = false;
     }
 
     /// <summary>
@@ -179,7 +224,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             gunType = GUNTYPE.SINGLESHOTRIGLE;
-            attackCD = 0.5f;
+            attackCD = 0.4f;
             Debug.Log("切换为单点");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -206,6 +251,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
+            attackTimer = Time.time;
+            ammoInMag[gunType]--;
+            Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
+
             GameObject fire = Instantiate(fireEffect, muzzleTransform);
             fire.transform.localPosition = Vector3.zero;
             fire.transform.localEulerAngles = Vector3.zero;//注意都是local
@@ -222,12 +271,23 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && Time.time - attackTimer >= attackCD)
         {
+            attackTimer = Time.time;
+            ammoInMag[gunType]--;
+            Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
+
             GameObject fire = Instantiate(fireEffect2, muzzleTransform);
             fire.transform.localPosition = Vector3.zero;
             fire.transform.localEulerAngles = Vector3.zero;//注意都是local
 
             animator.SetBool("AutoAttack", true);
             GunAttack();
+
+            //自动射击需要在子弹为0时直接停止射击动画，不然子弹为0时走不到下面的语句
+            //只有自动射击的动画需要单独处理是因为，该动画切回idle状态是有条件的
+            if(ammoInMag[gunType] == 0)
+            {
+                animator.SetBool("AutoAttack", false);
+            }
         }
         else if (Input.GetMouseButtonUp(0))
         {
@@ -243,6 +303,10 @@ public class PlayerController : MonoBehaviour
         //未开镜
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
+            attackTimer = Time.time;
+            ammoInMag[gunType]--;
+            Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
+
             GameObject fire = Instantiate(fireEffect3, muzzleTransform);
             fire.transform.localPosition = Vector3.zero;
             fire.transform.localEulerAngles = Vector3.zero;//注意都是local
@@ -260,8 +324,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void GunAttack()
     {
-        attackTimer = Time.time;
-
         RaycastHit hit;
         if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out hit, 20))
         {
