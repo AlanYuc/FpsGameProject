@@ -106,6 +106,9 @@ public class PlayerController : MonoBehaviour
         Vector3 moveH = transform.right * offsetH * moveSpeed * Time.deltaTime;
         transform.position += moveV;
         transform.position += moveH;
+
+        animator.SetFloat("MoveX", offsetH);
+        animator.SetFloat("MoveY", offsetV);
     }
 
     /// <summary>
