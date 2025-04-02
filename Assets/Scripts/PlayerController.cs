@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
     public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
     public bool isReloading;//装填状态，装填中不能射击
     public GameObject[] gun;//储存不同的枪
+    public GameObject scope;//狙击镜
+    public bool isScopeOpen;
 
     void Start()
     {
@@ -57,6 +59,7 @@ public class PlayerController : MonoBehaviour
         attackTimer = 0;
         gunType = GUNTYPE.SINGLESHOTRIGLE;
         isReloading = false;
+        isScopeOpen = false;
         InitAmmo();
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
@@ -72,6 +75,7 @@ public class PlayerController : MonoBehaviour
         Reload();
         Jump();
         ChangeGunType();
+        ScopeControl();
     }
 
     private void InitAmmo()
@@ -320,7 +324,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void SniperAttack()
     {
-        //未开镜
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
             attackTimer = Time.time;
@@ -334,9 +337,23 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("SniperAttack");
             Invoke("GunAttack", 0.2f);//动画总时长0.5秒，后坐力产生大概是0.2秒左右
         }
+    }
 
-        //开镜部分
-        //to do
+    private void ScopeControl()
+    {
+        if (Input.GetMouseButtonDown(1) && gunType == GUNTYPE.SNIPERRIFLE) 
+        {
+            if (isScopeOpen)
+            {
+                scope.SetActive(false);
+                isScopeOpen = false;
+            }
+            else
+            {
+                scope.SetActive(true);
+                isScopeOpen = true;
+            }
+        }
     }
 
     /// <summary>
