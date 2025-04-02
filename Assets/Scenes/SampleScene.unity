@@ -17428,7 +17428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &771320655
 Transform:
   m_ObjectHideFlags: 0
@@ -38955,7 +38955,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1655075580}
   - component: {fileID: 1655075582}
-  - component: {fileID: 1655075581}
   m_Layer: 0
   m_Name: SniperScope
   m_TagString: Untagged
@@ -38978,14 +38977,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7072444063363254229}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1655075581
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655075579}
-  m_Enabled: 1
 --- !u!20 &1655075582
 Camera:
   m_ObjectHideFlags: 0
@@ -41888,7 +41879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1793954672
 Transform:
   m_ObjectHideFlags: 0
@@ -51878,7 +51869,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d7eb87f8cfb7c3f449e9229df1e919e1, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -53334,6 +53325,7 @@ GameObject:
   - component: {fileID: 4764814305202600078}
   - component: {fileID: 1878303654869204628}
   - component: {fileID: 4745206459217282655}
+  - component: {fileID: 5492546278068710875}
   m_Layer: 0
   m_Name: Wraith
   m_TagString: Enemy
@@ -53341,6 +53333,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5492546278068710875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5492546278068710874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc9a181fbe094f48adf46f27f6aa534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1878303654869204628}
 --- !u!1 &5551194023921738372
 GameObject:
   m_ObjectHideFlags: 0
@@ -56238,6 +56243,8 @@ MonoBehaviour:
   - {fileID: 7072444063362964411}
   - {fileID: 1793954671}
   - {fileID: 771320654}
+  scope: {fileID: 1655075579}
+  isScopeOpen: 0
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0

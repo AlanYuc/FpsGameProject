@@ -372,7 +372,9 @@ public class PlayerController : MonoBehaviour
 
             switch (hit.collider.tag)
             {
-                case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity); break;
+                case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity);
+                    hit.collider.GetComponent<Enemy>().TakeDamage();
+                    break;
                 case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
                 case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
                 case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
