@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     public Dictionary<GUNTYPE, int> reserveAmmo;//备用子弹
     public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
     public bool isReloading;//装填状态，装填中不能射击
+    public GameObject[] gun;//储存不同的枪
 
     void Start()
     {
@@ -208,6 +209,19 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// 更换枪械模型
+    /// </summary>
+    /// <param name="cur"></param>
+    private void ChangeGunGameobject(int cur)
+    {
+        for(int i= 0; i < gun.Length; ++i)
+        {
+            gun[i].SetActive(false);
+        }
+        gun[cur].SetActive(true);
+    }
+
+    /// <summary>
     /// 跳跃
     /// </summary>
     private void Jump()
@@ -228,18 +242,21 @@ public class PlayerController : MonoBehaviour
         {
             gunType = GUNTYPE.SINGLESHOTRIGLE;
             attackCD = 0.4f;
+            ChangeGunGameobject(0);
             Debug.Log("切换为单点");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             gunType = GUNTYPE.AUTORIFLE;
             attackCD = 0.1f;
+            ChangeGunGameobject(1);
             Debug.Log("切换为自动");
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             gunType = GUNTYPE.SNIPERRIFLE;
             attackCD = 1f;
+            ChangeGunGameobject(2);
             Debug.Log("切换为狙击");
         }
 
