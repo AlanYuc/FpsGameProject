@@ -36,7 +36,10 @@ public class PlayerController : MonoBehaviour
     public GameObject fireEffect;//开枪的焰火特效
     public GameObject fireEffect2;
     public GameObject fireEffect3;
-    public GUNTYPE gunType;
+    public GUNTYPE gunType;//枪械类型
+    public Dictionary<GUNTYPE, int> magazineSize;//弹匣容量
+    public Dictionary<GUNTYPE, int> reserveAmmo;//备用子弹
+    public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
 
     void Start()
     {
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
         attackCD = 0.5f;
         attackTimer = 0;
         gunType = GUNTYPE.SINGLESHOTRIGLE;
+        InitAmmo();
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
         Cursor.visible = false; // 隐藏鼠标
@@ -64,6 +68,28 @@ public class PlayerController : MonoBehaviour
         Attack();
         Jump();
         ChangeGunType();
+    }
+
+    private void InitAmmo()
+    {
+        magazineSize = new Dictionary<GUNTYPE, int>();
+        reserveAmmo = new Dictionary<GUNTYPE, int>();
+        ammoInMag = new Dictionary<GUNTYPE, int>();
+
+        //设置弹匣容量
+        magazineSize.Add(GUNTYPE.SINGLESHOTRIGLE, 20);
+        magazineSize.Add(GUNTYPE.AUTORIFLE, 30);
+        magazineSize.Add(GUNTYPE.SNIPERRIFLE, 5);
+
+        //设置备弹量
+        reserveAmmo.Add(GUNTYPE.SINGLESHOTRIGLE, 80);
+        reserveAmmo.Add(GUNTYPE.AUTORIFLE, 120);
+        reserveAmmo.Add(GUNTYPE.SNIPERRIFLE, 30);
+
+        //游戏开始时向弹匣内添加满子弹
+        ammoInMag.Add(GUNTYPE.SINGLESHOTRIGLE, magazineSize[GUNTYPE.SINGLESHOTRIGLE]);
+        ammoInMag.Add(GUNTYPE.AUTORIFLE, magazineSize[GUNTYPE.AUTORIFLE]);
+        ammoInMag.Add(GUNTYPE.SNIPERRIFLE, magazineSize[GUNTYPE.SNIPERRIFLE]);
     }
 
     /// <summary>
@@ -133,6 +159,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 跳跃
+    /// </summary>
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -141,6 +170,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 切换枪械类型
+    /// </summary>
     private void ChangeGunType()
     {
         //按键切换
@@ -167,6 +199,9 @@ public class PlayerController : MonoBehaviour
         //to do
     }
 
+    /// <summary>
+    /// 单点射击
+    /// </summary>
     private void SingleShotAttack()
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
@@ -179,6 +214,9 @@ public class PlayerController : MonoBehaviour
             Invoke("GunAttack", 0.2f);//动画总时长0.5秒，后坐力产生大概是0.2秒左右
         }
     }
+    /// <summary>
+    /// 自动射击
+    /// </summary>
 
     private void AutoShotAttack()
     {
@@ -197,6 +235,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 狙击射击
+    /// </summary>
     private void SniperAttack()
     {
         //未开镜
@@ -214,6 +255,9 @@ public class PlayerController : MonoBehaviour
         //to do
     }
 
+    /// <summary>
+    /// 射击的射线检测
+    /// </summary>
     private void GunAttack()
     {
         attackTimer = Time.time;

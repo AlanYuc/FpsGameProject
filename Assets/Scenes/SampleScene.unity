@@ -55945,7 +55945,7 @@ MonoBehaviour:
   attackTimer: 0
   fireEffect: {fileID: 100006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
   fireEffect2: {fileID: 100000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
-  fireEffect3: {fileID: 0}
+  fireEffect3: {fileID: 100000, guid: 8eaaa4f553116f44b8459bc24201c514, type: 3}
   gunType: 0
 --- !u!4 &7072444063363254231
 Transform:
