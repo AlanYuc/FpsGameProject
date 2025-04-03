@@ -45,6 +45,13 @@ public class PlayerController : MonoBehaviour
     public GameObject[] gun;//储存不同的枪
     public GameObject scope;//狙击镜
     public bool isScopeOpen;
+    public int HP;
+    public AudioSource audioSource;
+    public AudioClip singleShotRifleAudioClip;
+    public AudioClip autoShotRifleAudioClip;
+    public AudioClip sniperRifleAudioClip;
+    public AudioClip reloadingAudioClip;
+    public AudioClip hitGroundAudioClip;//击中地面的音效
 
     void Start()
     {
@@ -61,6 +68,7 @@ public class PlayerController : MonoBehaviour
         gunType = GUNTYPE.SINGLESHOTRIGLE;
         isReloading = false;
         isScopeOpen = false;
+        HP = 100;
         InitAmmo();
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
@@ -282,6 +290,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
+            PlaySound(singleShotRifleAudioClip);
             attackTimer = Time.time;
             ammoInMag[gunType]--;
             Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
@@ -302,6 +311,7 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && Time.time - attackTimer >= attackCD)
         {
+            PlaySound(autoShotRifleAudioClip);
             attackTimer = Time.time;
             ammoInMag[gunType]--;
             Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
@@ -333,6 +343,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time - attackTimer >= attackCD)
         {
+            PlaySound(sniperRifleAudioClip);
             attackTimer = Time.time;
             ammoInMag[gunType]--;
             Debug.Log("剩余子弹数为" + ammoInMag[gunType]);
@@ -382,11 +393,36 @@ public class PlayerController : MonoBehaviour
                 case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity);
                     hit.collider.GetComponent<Enemy>().TakeDamage(weaponDamage[gunType]);
                     break;
-                case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
-                case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;
-                case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity); break;
-                case "River": Instantiate(riverEffect, hit.point + Vector3.up * 0.2f, Quaternion.identity); break;
+                case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity);
+                    PlaySound(hitGroundAudioClip);
+                    break;
+                case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity);
+                    PlaySound(hitGroundAudioClip); 
+                    break;
+                case "Tree": Instantiate(treeEffect, hit.point, Quaternion.identity);
+                    PlaySound(hitGroundAudioClip); 
+                    break;
+                case "River": Instantiate(riverEffect, hit.point + Vector3.up * 0.2f, Quaternion.identity);
+                    PlaySound(hitGroundAudioClip); 
+                    break;
             }
         }
+    }
+
+    /// <summary>
+    /// 受到攻击
+    /// </summary>
+    public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        Debug.Log("玩家剩余HP为" + HP);
+    }
+
+    /// <summary>
+    /// 播放音效
+    /// </summary>
+    public void PlaySound(AudioClip audioClip)
+    {
+        audioSource.PlayOneShot(audioClip);
     }
 }
