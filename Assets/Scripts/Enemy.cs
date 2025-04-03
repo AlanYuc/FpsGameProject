@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     public int attackDamage;
     public float attackCD;
     public float attackTimer;
+    public AudioSource audioSource;
+    public AudioClip attackSound;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +36,23 @@ public class Enemy : MonoBehaviour
                 attackTimer = Time.time;
                 animator.SetTrigger("Attack");
                 playerController.TakeDamage(attackDamage);
+
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                    audioSource.PlayOneShot(attackSound);
+                }
             }
         }
         else
         {
             agent.isStopped=false;
             animator.SetFloat("MoveState", 1);
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
     }
 
