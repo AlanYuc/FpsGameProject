@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
             {
                 attackTimer = Time.time;
                 animator.SetTrigger("Attack");
-                playerController.TakeDamage(attackDamage);
+                //playerController.TakeDamage(attackDamage);//调整位置，让血量变化和敌人攻击动作同步
 
                 if (audioSource.isPlaying)
                 {
@@ -72,6 +72,7 @@ public class Enemy : MonoBehaviour
 
     private void DelayAttackSound()
     {
+        playerController.TakeDamage(attackDamage);//让血量变化和敌人攻击动作同步
         audioSource.PlayOneShot(attackSound);
     }
 }

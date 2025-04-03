@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GUNTYPE
 {
@@ -54,6 +55,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip hitGroundAudioClip;//击中地面的音效
     public AudioClip jumpAudioClip;
     public AudioSource walkAudioSource;
+
+    public Text playerHP;
 
     void Start()
     {
@@ -434,6 +437,13 @@ public class PlayerController : MonoBehaviour
     {
         HP -= damage;
         Debug.Log("玩家剩余HP为" + HP);
+
+        if (HP <= 0)
+        {
+            HP = 0;
+        }
+
+        playerHP.text = HP.ToString();
     }
 
     /// <summary>
