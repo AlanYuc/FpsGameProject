@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     {
         attackDamage = 10;
         attackTimer = 0;
-        attackCD = 1.0f;
+        attackCD = 2.3f;//与攻击动画时长相关
     }
 
     // Update is called once per frame
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
                 if (audioSource.isPlaying)
                 {
                     audioSource.Stop();
-                    audioSource.PlayOneShot(attackSound);
+                    Invoke("DelayAttackSound", 1);
                 }
             }
         }
@@ -68,5 +68,10 @@ public class Enemy : MonoBehaviour
         {
             animator.SetBool("Die", true);
         }
+    }
+
+    private void DelayAttackSound()
+    {
+        audioSource.PlayOneShot(attackSound);
     }
 }
