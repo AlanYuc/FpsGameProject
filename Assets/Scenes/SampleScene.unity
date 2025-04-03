@@ -58545,6 +58545,7 @@ MonoBehaviour:
   sniperRifleAudioClip: {fileID: 8300000, guid: 69f7573c6b234e542b12918c77b81a87, type: 3}
   reloadingAudioClip: {fileID: 8300000, guid: d4b01f53c3ff80043ab3bd5d4ba19567, type: 3}
   hitGroundAudioClip: {fileID: 8300000, guid: f3d612ddc815eef4e94a1ebac7b094cf, type: 3}
+  jumpAudioClip: {fileID: 8300000, guid: 2513e42270e6a9348af2d7916a03e1cb, type: 3}
 --- !u!4 &7072444063363254231
 Transform:
   m_ObjectHideFlags: 0

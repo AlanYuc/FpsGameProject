@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip sniperRifleAudioClip;
     public AudioClip reloadingAudioClip;
     public AudioClip hitGroundAudioClip;//击中地面的音效
+    public AudioClip jumpAudioClip;
+    public AudioSource walkAudioSource;
 
     void Start()
     {
@@ -129,6 +131,21 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("MoveX", offsetH);
         animator.SetFloat("MoveY", offsetV);
+
+        if(!(offsetH ==0 && offsetV == 0))
+        {
+            if (!walkAudioSource.isPlaying)
+            {
+                walkAudioSource.Play();
+            }
+        }
+        else
+        {
+            if (walkAudioSource.isPlaying)
+            {
+                walkAudioSource.Stop();
+            }
+        }
     }
 
     /// <summary>
@@ -248,6 +265,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerRigidbody.AddForce(jumpforce * Vector3.up);
+            audioSource.PlayOneShot(jumpAudioClip);
         }
     }
 
