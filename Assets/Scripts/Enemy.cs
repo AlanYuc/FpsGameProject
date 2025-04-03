@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
     public Animator animator;
     public int HP;
+    public Transform playerPos;
+    public NavMeshAgent agent;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +19,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        agent.SetDestination(playerPos.position);
     }
 
     /// <summary>
