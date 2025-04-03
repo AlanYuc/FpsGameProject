@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public Dictionary<GUNTYPE, int> magazineSize;//弹匣容量
     public Dictionary<GUNTYPE, int> reserveAmmo;//备用子弹
     public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
+    public Dictionary<GUNTYPE, int> weaponDamage;//不同武器的伤害
     public bool isReloading;//装填状态，装填中不能射击
     public GameObject[] gun;//储存不同的枪
     public GameObject scope;//狙击镜
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
         magazineSize = new Dictionary<GUNTYPE, int>();
         reserveAmmo = new Dictionary<GUNTYPE, int>();
         ammoInMag = new Dictionary<GUNTYPE, int>();
+        weaponDamage = new Dictionary<GUNTYPE, int>();
 
         //设置弹匣容量
         magazineSize.Add(GUNTYPE.SINGLESHOTRIGLE, 20);
@@ -98,6 +100,11 @@ public class PlayerController : MonoBehaviour
         ammoInMag.Add(GUNTYPE.SINGLESHOTRIGLE, magazineSize[GUNTYPE.SINGLESHOTRIGLE]);
         ammoInMag.Add(GUNTYPE.AUTORIFLE, magazineSize[GUNTYPE.AUTORIFLE]);
         ammoInMag.Add(GUNTYPE.SNIPERRIFLE, magazineSize[GUNTYPE.SNIPERRIFLE]);
+
+        //设置武器的伤害
+        weaponDamage.Add(GUNTYPE.SINGLESHOTRIGLE, 5);
+        weaponDamage.Add(GUNTYPE.AUTORIFLE, 1);
+        weaponDamage.Add(GUNTYPE.SNIPERRIFLE, 50);
     }
 
     /// <summary>
@@ -373,7 +380,7 @@ public class PlayerController : MonoBehaviour
             switch (hit.collider.tag)
             {
                 case "Enemy": Instantiate(bloodEffect, hit.point, Quaternion.identity);
-                    hit.collider.GetComponent<Enemy>().TakeDamage();
+                    hit.collider.GetComponent<Enemy>().TakeDamage(weaponDamage[gunType]);
                     break;
                 case "Wall": Instantiate(wallEffect, hit.point, Quaternion.identity); break;
                 case "Grass": Instantiate(grassEffect, hit.point, Quaternion.identity); break;

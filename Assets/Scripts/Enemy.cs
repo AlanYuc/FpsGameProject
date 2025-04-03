@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public Animator animator;
+    public int HP;
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +22,14 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// 对敌人造成伤害了
     /// </summary>
-    public void TakeDamage()
+    public void TakeDamage(int damageValue)
     {
         animator.SetTrigger("Hurt");
+        HP -= damageValue;
+        Debug.Log("当前敌人生命值还剩" + HP);
+        if (HP <= 0)
+        {
+            animator.SetBool("Die", true);
+        }
     }
 }

@@ -53346,6 +53346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1878303654869204628}
+  HP: 100
 --- !u!1 &5551194023921738372
 GameObject:
   m_ObjectHideFlags: 0
