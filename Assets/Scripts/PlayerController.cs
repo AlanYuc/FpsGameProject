@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
     public GameObject AutoShotRifleUI;
     public GameObject SniperRifleUI;
     public GameObject BloodUI;
+    public GameObject ScopeUI;
     public Dictionary<GUNTYPE, GameObject> gunUI;
 
 
@@ -408,11 +409,13 @@ public class PlayerController : MonoBehaviour
             {
                 scope.SetActive(false);
                 isScopeOpen = false;
+                ScopeUI.SetActive(false);
             }
             else
             {
                 scope.SetActive(true);
                 isScopeOpen = true;
+                ScopeUI.SetActive(true);
             }
         }
     }
