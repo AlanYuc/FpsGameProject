@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public float attackTimer;
     public AudioSource audioSource;
     public AudioClip attackSound;
+    public bool isDead;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +22,17 @@ public class Enemy : MonoBehaviour
         attackDamage = 10;
         attackTimer = 0;
         attackCD = 2.3f;//与攻击动画时长相关
+        isDead = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            Invoke("DestroyEnemy", 5f);
+            return;
+        }
         agent.SetDestination(playerController.transform.position);
         if(Vector3.Distance(transform.position , playerController.transform.position) <= 1.0f)
         {
@@ -66,7 +73,9 @@ public class Enemy : MonoBehaviour
         Debug.Log("当前敌人生命值还剩" + HP);
         if (HP <= 0)
         {
+            isDead = true;
             animator.SetBool("Die", true);
+            agent.isStopped = true;
         }
     }
 
@@ -74,5 +83,10 @@ public class Enemy : MonoBehaviour
     {
         playerController.TakeDamage(attackDamage);//让血量变化和敌人攻击动作同步
         audioSource.PlayOneShot(attackSound);
+    }
+
+    private void DestroyEnemy()
+    {
+        Destroy(gameObject);
     }
 }
