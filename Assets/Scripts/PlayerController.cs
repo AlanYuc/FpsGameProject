@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
     public GameObject SingleShotRifleUI;
     public GameObject AutoShotRifleUI;
     public GameObject SniperRifleUI;
+    public GameObject BloodUI;
     public Dictionary<GUNTYPE, GameObject> gunUI;
 
 
@@ -465,6 +466,13 @@ public class PlayerController : MonoBehaviour
         }
 
         playerHP.text = HP.ToString();
+        BloodUI.SetActive(true);
+        Invoke("DelayHideBloodUI", 0.4f);
+    }
+
+    private void DelayHideBloodUI()
+    {
+        BloodUI.SetActive(false);
     }
 
     /// <summary>
