@@ -66,12 +66,14 @@ public class PlayerController : MonoBehaviour
     public GameObject SniperRifleUI;
     public GameObject BloodUI;
     public GameObject ScopeUI;
+    public GameObject MenuUI;
+    public bool isMenuOpen;
     public Dictionary<GUNTYPE, GameObject> gunUI;
 
 
     void Start()
     {
-        transform.position = new Vector3(-0.2f, transform.position.y, transform.position.z);
+        //transform.position = new Vector3(-12.0f, transform.position.y, transform.position.z);
         moveSpeed = 2.0f;
         mouseSensitivity = 800.0f;
         cameraMinVerticalAngle = -60f;
@@ -85,6 +87,7 @@ public class PlayerController : MonoBehaviour
         isReloading = false;
         isScopeOpen = false;
         HP = 100;
+        isMenuOpen = false;
         InitAmmo();
         InitUI();
 
@@ -103,6 +106,7 @@ public class PlayerController : MonoBehaviour
         ChangeGunType();
         ScopeControl();
         UpdateUI();
+        EscMenu();
     }
 
     private void InitAmmo()
@@ -211,6 +215,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
+        if (isMenuOpen)
+        {
+            return;
+        }
+
         if (ammoInMag[gunType] > 0 && !isReloading)//弹匣内有子弹可以射击
         {
             switch (gunType)
@@ -465,7 +474,8 @@ public class PlayerController : MonoBehaviour
 
         if (HP <= 0)
         {
-            HP = 0;
+            HP = 100;
+            transform.position = new Vector3(-12.0f, 0.0f, -10.0f);
         }
 
         playerHP.text = HP.ToString();
@@ -510,7 +520,29 @@ public class PlayerController : MonoBehaviour
 
         gunUI[gunType].transform.Find("mask").gameObject.SetActive(false);
         gunUI[gunType].transform.Find("GunName").gameObject.SetActive(true);
+    }
 
-        Debug.Log(gunUI[gunType].transform.Find("GunName").gameObject.name);
+    private void EscMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !isMenuOpen)
+        {
+            MenuUI.SetActive(true);
+            isMenuOpen = true;
+            Cursor.lockState = CursorLockMode.None; //接触鼠标锁定
+            Cursor.visible = true; //显示鼠标
+        }
+    }
+
+    public void CancelBtn()
+    {
+        MenuUI.SetActive(false);
+        isMenuOpen = false;
+        Cursor.lockState = CursorLockMode.Locked; 
+        Cursor.visible = false; 
+    }
+
+    public void ExitBtn()
+    {
+        Application.Quit();
     }
 }

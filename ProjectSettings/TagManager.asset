@@ -9,6 +9,9 @@ TagManager:
   - Grass
   - Tree
   - River
+  - AmmoStack
+  - HealBox
+  - SpawnEnemyBox
   layers:
   - Default
   - TransparentFX
