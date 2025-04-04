@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +58,14 @@ public class PlayerController : MonoBehaviour
     public AudioSource walkAudioSource;
 
     public Text playerHP;
+    public Text ammoInMagText;
+    public Text reserveAmmoText;
+    public Text moneyText;
+    public GameObject SingleShotRifleUI;
+    public GameObject AutoShotRifleUI;
+    public GameObject SniperRifleUI;
+    public Dictionary<GUNTYPE, GameObject> gunUI;
+
 
     void Start()
     {
@@ -75,6 +84,7 @@ public class PlayerController : MonoBehaviour
         isScopeOpen = false;
         HP = 100;
         InitAmmo();
+        InitUI();
 
         Cursor.lockState = CursorLockMode.Locked; // 锁定鼠标
         Cursor.visible = false; // 隐藏鼠标
@@ -90,6 +100,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         ChangeGunType();
         ScopeControl();
+        UpdateUI();
     }
 
     private void InitAmmo()
@@ -118,6 +129,15 @@ public class PlayerController : MonoBehaviour
         weaponDamage.Add(GUNTYPE.SINGLESHOTRIGLE, 5);
         weaponDamage.Add(GUNTYPE.AUTORIFLE, 1);
         weaponDamage.Add(GUNTYPE.SNIPERRIFLE, 50);
+    }
+
+    private void InitUI()
+    {
+        gunUI = new Dictionary<GUNTYPE, GameObject>();
+
+        gunUI.Add(GUNTYPE.SINGLESHOTRIGLE, SingleShotRifleUI);
+        gunUI.Add(GUNTYPE.AUTORIFLE, AutoShotRifleUI);
+        gunUI.Add(GUNTYPE.SNIPERRIFLE, SniperRifleUI);
     }
 
     /// <summary>
@@ -299,6 +319,7 @@ public class PlayerController : MonoBehaviour
             ChangeGunGameobject(2);
             Debug.Log("切换为狙击");
         }
+        ChangeGunUI();
 
         //滚轮切换
         //to do
@@ -452,5 +473,33 @@ public class PlayerController : MonoBehaviour
     public void PlaySound(AudioClip audioClip)
     {
         audioSource.PlayOneShot(audioClip);
+    }
+
+    private void UpdateUI()
+    {
+        //子弹数量更新
+        if (!isReloading)
+        {
+            ammoInMagText.text = ammoInMag[gunType].ToString();
+            reserveAmmoText.text = reserveAmmo[gunType].ToString();
+        }
+        //金币更新
+        //moneyText.text 
+    }
+
+    private void ChangeGunUI()
+    {
+        //当前使用枪械UI更新
+        gunUI[GUNTYPE.SINGLESHOTRIGLE].transform.Find("mask").gameObject.SetActive(true);
+        gunUI[GUNTYPE.SINGLESHOTRIGLE].transform.Find("GunName").gameObject.SetActive(false);
+        gunUI[GUNTYPE.AUTORIFLE].transform.Find("mask").gameObject.SetActive(true);
+        gunUI[GUNTYPE.AUTORIFLE].transform.Find("GunName").gameObject.SetActive(false);
+        gunUI[GUNTYPE.SNIPERRIFLE].transform.Find("mask").gameObject.SetActive(true);
+        gunUI[GUNTYPE.SNIPERRIFLE].transform.Find("GunName").gameObject.SetActive(false);
+
+        gunUI[gunType].transform.Find("mask").gameObject.SetActive(false);
+        gunUI[gunType].transform.Find("GunName").gameObject.SetActive(true);
+
+        Debug.Log(gunUI[gunType].transform.Find("GunName").gameObject.name);
     }
 }
