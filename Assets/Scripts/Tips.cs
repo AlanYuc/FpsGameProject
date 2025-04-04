@@ -20,14 +20,11 @@ public class Tips : MonoBehaviour
     void Update()
     {
         ShowTipPanel();
+        ItemInteraction();
     }
 
     private void ShowTipPanel()
     {
-        //if(transform.tag == "HealBox")
-        //{
-        //    Debug.Log(Vector3.Distance(transform.position, player.transform.position));
-        //}
         if(Vector3.Distance(transform.position , player.transform.position) <= 2.0f)
         {
             tipPanel.SetActive(true);
@@ -41,6 +38,28 @@ public class Tips : MonoBehaviour
                 tipPanel.SetActive(false);
                 tip.SetActive(false);
                 isTipsOpen = false;
+            }
+        }
+    }
+
+    private void ItemInteraction()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && isTipsOpen)
+        {
+            Debug.Log(transform.tag);
+            switch (transform.tag)
+            {
+                case "AmmoStack":
+                    player.GetComponent<PlayerController>().FullAmmo();
+                    break;
+                case "HealBox":
+                    player.GetComponent<PlayerController>().Recover();
+                    break;
+                case "SpawnEnemyBox":
+                    player.GetComponent<PlayerController>().SpawnEnemy();
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     public Animator animator;
     public int HP;
-    public PlayerController playerController;
+    public GameObject player;
     public NavMeshAgent agent;
     public int attackDamage;
     public float attackCD;
@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
         attackTimer = 0;
         attackCD = 2.3f;//与攻击动画时长相关
         isDead = false;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -33,8 +34,8 @@ public class Enemy : MonoBehaviour
             Invoke("DestroyEnemy", 5f);
             return;
         }
-        agent.SetDestination(playerController.transform.position);
-        if(Vector3.Distance(transform.position , playerController.transform.position) <= 1.0f)
+        agent.SetDestination(player.transform.position);
+        if(Vector3.Distance(transform.position , player.transform.position) <= 1.0f)
         {
             agent.isStopped = true;
             animator.SetFloat("MoveState", 0);
@@ -88,7 +89,7 @@ public class Enemy : MonoBehaviour
 
     private void EnemyAttack()
     {
-        playerController.TakeDamage(attackDamage);
+        player.GetComponent<PlayerController>().TakeDamage(attackDamage);
     }
 
     private void DestroyEnemy()

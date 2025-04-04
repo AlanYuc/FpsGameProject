@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     public GUNTYPE gunType;//枪械类型
     public Dictionary<GUNTYPE, int> magazineSize;//弹匣容量
     public Dictionary<GUNTYPE, int> reserveAmmo;//备用子弹
+    public Dictionary<GUNTYPE, int> reserveAmmoMaxSize;//备用子弹上限
     public Dictionary<GUNTYPE, int> ammoInMag;//弹匣内剩余子弹
     public Dictionary<GUNTYPE, int> weaponDamage;//不同武器的伤害
     public bool isReloading;//装填状态，装填中不能射击
@@ -48,6 +49,10 @@ public class PlayerController : MonoBehaviour
     public GameObject scope;//狙击镜
     public bool isScopeOpen;
     public int HP;
+    public GameObject enemy;
+    private Vector3 enemySpawnPos;
+
+
     public AudioSource audioSource;
     public AudioClip singleShotRifleAudioClip;
     public AudioClip autoShotRifleAudioClip;
@@ -88,6 +93,7 @@ public class PlayerController : MonoBehaviour
         isScopeOpen = false;
         HP = 100;
         isMenuOpen = false;
+        enemySpawnPos = new Vector3(-4.0f, 0.5f, -10.0f);
         InitAmmo();
         InitUI();
 
@@ -113,6 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         magazineSize = new Dictionary<GUNTYPE, int>();
         reserveAmmo = new Dictionary<GUNTYPE, int>();
+        reserveAmmoMaxSize = new Dictionary<GUNTYPE, int>();
         ammoInMag = new Dictionary<GUNTYPE, int>();
         weaponDamage = new Dictionary<GUNTYPE, int>();
 
@@ -125,6 +132,11 @@ public class PlayerController : MonoBehaviour
         reserveAmmo.Add(GUNTYPE.SINGLESHOTRIGLE, 80);
         reserveAmmo.Add(GUNTYPE.AUTORIFLE, 120);
         reserveAmmo.Add(GUNTYPE.SNIPERRIFLE, 30);
+
+        //设置备弹量上限
+        reserveAmmoMaxSize.Add(GUNTYPE.SINGLESHOTRIGLE, 80);
+        reserveAmmoMaxSize.Add(GUNTYPE.AUTORIFLE, 120);
+        reserveAmmoMaxSize.Add(GUNTYPE.SNIPERRIFLE, 30);
 
         //游戏开始时向弹匣内添加满子弹
         ammoInMag.Add(GUNTYPE.SINGLESHOTRIGLE, magazineSize[GUNTYPE.SINGLESHOTRIGLE]);
@@ -506,6 +518,8 @@ public class PlayerController : MonoBehaviour
         }
         //金币更新
         //moneyText.text 
+
+        
     }
 
     private void ChangeGunUI()
@@ -544,5 +558,21 @@ public class PlayerController : MonoBehaviour
     public void ExitBtn()
     {
         Application.Quit();
+    }
+
+    public void Recover()
+    {
+        HP = 100;
+        playerHP.text = HP.ToString();
+    }
+
+    public void FullAmmo()
+    {
+        reserveAmmo[gunType] = reserveAmmoMaxSize[gunType] + magazineSize[gunType];
+    }
+
+    public void SpawnEnemy()
+    {
+        Instantiate(enemy, enemySpawnPos, Quaternion.identity);
     }
 }
